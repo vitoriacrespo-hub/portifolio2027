@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfólio Mágico de Exercícios 2027 | Disney Princesas</title>
+    <!-- Tailwind CSS CDN para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fonts do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=Quicksand:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        princess: {
+                            pink: '#FDE2E4',
+                            deepPink: '#FF85A1',
+                            purple: '#E2ECE9',
+                            lilac: '#E8AEB7',
+                            gold: '#F4D06F',
+                            goldHover: '#E0B84C',
+                            blue: '#BEE1E6',
+                            royalPurple: '#593C47',
+                            glass: 'rgba(255, 255, 255, 0.75)'
+                        }
+                    },
+                    fontFamily: {
+                        title: ['Cinzel', 'serif'],
+                        cursive: ['Great Vibes', 'cursive'],
+                        sans: ['Quicksand', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Estilos personalizados */
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 50%, #e1f5fe 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Canvas das partículas flutuantes */
+        #magicCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Efeito de Vidro Fosco (Glassmorphism) */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(186, 104, 200, 0.15);
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 15px 35px rgba(255, 133, 161, 0.3);
+        }
+
+        /* Animações e brilhos */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(244, 208, 111, 0.6); }
+            50% { box-shadow: 0 0 30px rgba(244, 208, 111, 1), 0 0 45px rgba(255, 133, 161, 0.8); }
+        }
+
+        .glow-button {
+            animation: pulseGlow 3s infinite;
+        }
+
+        /* Custom Scrollbar Mágica */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fce4ec;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff85a1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f4d06f;
+        }
+    </style>
+</head>
+<body class="text-gray-800 relative pb-16">
+
+    <!-- Canvas para Partículas Mágicas (Estrelas Caindo) -->
+    <canvas id="magicCanvas"></canvas>
+
+    <!-- Cabeçalho / Banner Principal -->
+    <header class="relative z-20 pt-8 pb-12 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <!-- Coroa Decorativa -->
+            <div class="inline-block animate-float mb-2">
+                <i class="fa-solid font-900 fa-crown text-5xl text-princess-gold drop-shadow-md"></i>
+            </div>
+            
+            <h1 class="font-cursive text-5xl md:text-7xl text-princess-royalPurple mb-2 tracking-wide font-bold drop-shadow">
+                Portfólio Mágico de Exercícios
+            </h1>
+            <p class="font-title text-sm md:text-lg text-pink-700 font-semibold tracking-widest uppercase mb-4">
+                Ano Letivo 2027 • Edição Princesas Disney
+            </p>
+
+            <div class="w-32 h-1 bg-gradient-to-r from-transparent via-princess-gold to-transparent mx-auto rounded-full mb-6"></div>
+
+            <p class="max-w-xl mx-auto text-gray-700 text-sm md:text-base bg-white/60 backdrop-blur-sm p-4 rounded-2xl border border-pink-200 shadow-sm">
+                Bem-vindo(a) ao meu reino do conhecimento! Aqui estão reunidos todos os desafios, projetos e exercícios desenvolvidos ao longo de 2027 para avaliação do professor.
+            </p>
+        </div>
+    </header>
+
+    <!-- Botão Mágico do Castelo Encantado -->
+    <section class="relative z-20 text-center mb-12 px-4">
+        <div class="inline-block relative">
+            <button id="castleBtn" onclick="triggerMagicCastle()" class="glow-button bg-gradient-to-r from-princess-deepPink via-purple-500 to-princess-gold hover:from-pink-600 hover:to-yellow-500 text-white font-title font-bold px-8 py-5 rounded-full text-lg md:text-xl shadow-2xl transform transition hover:-translate-y-1 active:translate-y-0 flex items-center gap-4 mx-auto border-2 border-white">
+                <i class="fa-solid fa-castle text-2xl md:text-3xl text-yellow-200"></i>
+                <span>Segredo do Castelo Mágico</span>
+                <i class="fa-solid fa-wand-magic-sparkles text-2xl text-yellow-200"></i>
+            </button>
+        </div>
+
+        <!-- Caixa de Mensagem Revelada pelo Castelo -->
+        <div id="magicMessage" class="hidden max-w-lg mx-auto mt-6 p-6 rounded-3xl glass-card border-2 border-princess-gold transform transition-all duration-500 scale-95 opacity-0">
+            <div class="text-princess-gold text-3xl mb-2">
+                <i class="fa-solid fa-sparkles"></i>
+            </div>
+            <h3 id="princessTitle" class="font-cursive text-3xl text-princess-royalPurple font-bold mb-1">
+                Mensagem da Princesa
+            </h3>
+            <p id="princessQuote" class="italic text-gray-700 mb-3">
+                "Você é mais forte do que acredita, mais capaz do que imagina!"
+            </p>
+            <div class="text-xs text-pink-600 font-semibold uppercase tracking-wider">
+                ✨ Desejo de Sucesso para os Estudos de 2027 ✨
+            </div>
+        </div>
+    </section>
+
+    <!-- Conteúdo Principal / Módulos de Trabalhos -->
+    <main class="max-w-6xl mx-auto px-4 relative z-20">
+
+        <!-- Barra de Ferramentas e Filtros -->
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4 bg-white/70 p-4 rounded-2xl border border-pink-200 shadow-sm backdrop-blur-sm">
+            
+            <!-- Filtro por Bimestre -->
+            <div class="flex flex-wrap gap-2 justify-center">
+                <button onclick="filterBimestre('todos')" class="filter-btn active-filter bg-princess-deepPink text-white px-4 py-2 rounded-xl text-sm font-semibold transition hover:opacity-90 shadow-sm" data-bimestre="todos">
+                    <i class="fa-solid fa-crown mr-1"></i> Todos
+                </button>
+                <button onclick="filterBimestre('1')" class="filter-btn bg-white text-gray-700 hover:bg-pink-100 px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm" data-bimestre="1">
+                    1º Bimestre
+                </button>
+                <button onclick="filterBimestre('2')" class="filter-btn bg-white text-gray-700 hover:bg-pink-100 px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm" data-bimestre="2">
+                    2º Bimestre
+                </button>
+                <button onclick="filterBimestre('3')" class="filter-btn bg-white text-gray-700 hover:bg-pink-100 px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm" data-bimestre="3">
+                    3º Bimestre
+                </button>
+                <button onclick="filterBimestre('4')" class="filter-btn bg-white text-gray-700 hover:bg-pink-100 px-4 py-2 rounded-xl text-sm font-semibold transition shadow-sm" data-bimestre="4">
+                    4º Bimestre
+                </button>
+            </div>
+
+            <!-- Botão Adicionar Novo Exercício (Para o Aluno) -->
+            <button onclick="openModal()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition flex items-center gap-2">
+                <i class="fa-solid fa-plus-circle text-lg"></i>
+                <span>Novo Exercício</span>
+            </button>
+        </div>
+
+        <!-- Grade de Cartões dos Exercícios -->
+        <div id="projectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Os cartões serão inseridos dinamicamente pelo JavaScript aqui -->
+        </div>
+
+        <!-- Estado Vazio (Caso nenhum projeto seja encontrado no filtro) -->
+        <div id="emptyState" class="hidden text-center py-16">
+            <div class="text-6xl text-pink-300 mb-4"><i class="fa-solid fa-gem"></i></div>
+            <h3 class="font-title text-xl text-gray-600">Nenhum exercício encontrado neste bimestre.</h3>
+            <p class="text-gray-500 text-sm mt-1">Clique no botão "Novo Exercício" acima para adicionar!</p>
+        </div>
+
+    </main>
+
+    <!-- Modal para Adicionar/Editar Exercício -->
+    <div id="projectModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border-4 border-princess-pink transform transition-transform duration-300 scale-95 relative">
+            
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-pink-600 text-xl w-8 h-8 rounded-full flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="inline-block p-3 bg-pink-100 rounded-full text-princess-deepPink mb-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-2xl"></i>
+                </div>
+                <h3 class="font-title text-2xl text-princess-royalPurple font-bold">Cadastrar Exercício</h3>
+                <p class="text-xs text-gray-500">Adicione os detalhes do trabalho para a correção do professor</p>
+            </div>
+
+            <form id="projectForm" onsubmit="saveProject(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Título do Exercício</label>
+                    <input type="text" id="projTitle" required placeholder="Ex: Algoritmos e Variáveis" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-princess-deepPink focus:border-transparent outline-none transition text-sm">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Bimestre</label>
+                        <select id="projBimestre" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-princess-deepPink focus:border-transparent outline-none transition text-sm">
+                            <option value="1">1º Bimestre</option>
+                            <option value="2">2º Bimestre</option>
+                            <option value="3">3º Bimestre</option>
+                            <option value="4">4º Bimestre</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Data de Entrega</label>
+                        <input type="date" id="projDate" required class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-princess-deepPink focus:border-transparent outline-none transition text-sm">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Tema / Princesa Inspiradora</label>
+                    <select id="projTheme" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-princess-deepPink focus:border-transparent outline-none transition text-sm">
+                        <option value="Cinderela">Cinderela (Azul Celestial)</option>
+                        <option value="Bela">Bela (Dourado & Rosa)</option>
+                        <option value="Ariel">Ariel (Verde Água & Coral)</option>
+                        <option value="Rapunzel">Rapunzel (Lilás Encantado)</option>
+                        <option value="Moana">Moana (Tropical & Mar)</option>
+                        <option value="Jasmine">Jasmine (Turquesa Mágico)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Descrição Curta</label>
+                    <textarea id="projDesc" rows="2" required placeholder="Resumo do que foi desenvolvido neste exercício..." class="w-full px-4 py-2 rounded-xl border border-gray-300 focus:ring-2 focus:ring-princess-deepPink focus:border-transparent outline-none transition text-sm"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-1">Link do Projeto (GitHub / Vercel / GitHub Pages)</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-2.5 text-gray-400"><i class="fa-brands fa-github"></i></span>
+                        <input type="url" id="projLink" required placeholder="https://seu-usuario.github.io/meu-exercicio" class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-princess-deepPink focus:border-transparent outline-none transition text-sm">
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3">
+                    <button type="button" onclick="closeModal()" class="px-5 py-2.5 rounded-xl text-gray-600 hover:bg-gray-100 font-semibold text-sm transition">Cancelar</button>
+                    <button type="submit" class="px-6 py-2.5 rounded-xl bg-princess-deepPink hover:bg-pink-600 text-white font-bold text-sm shadow-md transition">Salvar Exercício</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="mt-20 text-center text-xs text-gray-500 relative z-20">
+        <p>Portfólio Escolar 2027 • Desenvolvido com carinho e magia ✨</p>
+    </footer>
+
+    <!-- LÓGICA JAVASCRIPT INTEGRADA -->
+    <script>
+        /* ==========================================================================
+           1. BANCO DE DADOS INICIAL E ESTRUTURA DE DADOS (LOCALSTORAGE)
+           ========================================================================== */
+        
+        // Exemplos pré-carregados para o ano de 2027
+        const defaultProjects = [
+            {
+                id: 1,
+                title: "Primeiros Passos em HTML & CSS",
+                bimestre: "1",
+                date: "2027-03-15",
+                theme: "Cinderela",
+                desc: "Criando a minha primeira página temática estruturada com marcas HTML5 e estilização pastel.",
+                link: "https://github.com"
+            },
+            {
+                id: 2,
+                title: "Lógica de Programação com Rapunzel",
+                bimestre: "1",
+                date: "2027-04-20",
+                theme: "Rapunzel",
+                desc: "Estruturas condicionais e laços de repetição aplicados na resolução de desafios matemáticos.",
+                link: "https://github.com"
+            },
+            {
+                id: 3,
+                title: "Calculadora Encantada em JS",
+                bimestre: "2",
+                date: "2027-06-10",
+                theme: "Bela",
+                desc: "Aplicação interativa utilizando funções JavaScript, manipulação do DOM e eventos de clique.",
+                link: "https://github.com"
+            }
+        ];
+
+        // Carrega projetos salvos no navegador ou usa os padrões
+        let projects = JSON.parse(localStorage.getItem('disney_portfolio_2027')) || defaultProjects;
+        let currentFilter = 'todos';
+
+        // Temas de Princesas com cores e ícones correspondentes
+        const themeConfig = {
+            'Cinderela': { bg: 'bg-blue-50', badge: 'bg-blue-100 text-blue-700', border: 'border-blue-200', icon: 'fa-glass-stepper' },
+            'Bela': { bg: 'bg-amber-50', badge: 'bg-amber-100 text-amber-800', border: 'border-amber-200', icon: 'fa-book-open' },
+            'Ariel': { bg: 'bg-emerald-50', badge: 'bg-emerald-100 text-emerald-800', border: 'border-emerald-200', icon: 'fa-water' },
+            'Rapunzel': { bg: 'bg-purple-50', badge: 'bg-purple-100 text-purple-800', border: 'border-purple-200', icon: 'fa-sun' },
+            'Moana': { bg: 'bg-orange-50', badge: 'bg-orange-100 text-orange-800', border: 'border-orange-200', icon: 'fa-compass' },
+            'Jasmine': { bg: 'bg-teal-50', badge: 'bg-teal-100 text-teal-800', border: 'border-teal-200', icon: 'fa-feather' }
+        };
+
+        /* ==========================================================================
+           2. RENDERIZAÇÃO DOS CARTOES DE EXERCÍCIO
+           ========================================================================== */
+        function renderProjects() {
+            const grid = document.getElementById('projectsGrid');
+            const emptyState = document.getElementById('emptyState');
+            grid.innerHTML = '';
+
+            const filteredProjects = currentFilter === 'todos' 
+                ? projects 
+                : projects.filter(p => p.bimestre === currentFilter);
+
+            if (filteredProjects.length === 0) {
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+            }
+
+            filteredProjects.forEach(proj => {
+                const config = themeConfig[proj.theme] || themeConfig['Cinderela'];
+                
+                // Formatação simples da data
+                const dateParts = proj.date.split('-');
+                const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+
+                const cardHTML = `
+                    <div class="glass-card rounded-3xl p-6 relative flex flex-col justify-between transition-all duration-300 hover:-translate-y-2 border ${config.border}">
+                        <!-- Topo do Card -->
+                        <div>
+                            <div class="flex justify-between items-start mb-3">
+                                <span class="text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider ${config.badge}">
+                                    ${proj.bimestre}º Bimestre
+                                </span>
+                                <span class="text-xs text-gray-500 font-semibold flex items-center gap-1">
+                                    <i class="fa-regular fa-calendar-alt"></i> ${formattedDate}
+                                </span>
+                            </div>
+
+                            <h4 class="font-title text-xl text-princess-royalPurple font-bold mb-2 flex items-center gap-2">
+                                <span>${proj.title}</span>
+                            </h4>
+
+                            <p class="text-gray-600 text-sm mb-6 line-clamp-3">
+                                ${proj.desc}
+                            </p>
+                        </div>
+
+                        <!-- Rodapé do Card com Botão GitHub -->
+                        <div class="pt-4 border-t border-gray-200/60 flex items-center justify-between gap-2">
+                            <span class="text-xs text-gray-500 italic">Princesa: ${proj.theme}</span>
+                            
+                            <div class="flex items-center gap-2">
+                                <button onclick="deleteProject(${proj.id})" class="text-gray-400 hover:text-red-500 p-2 text-sm transition" title="Excluir">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                                
+                                <a href="${proj.link}" target="_blank" rel="noopener noreferrer" 
+                                   class="bg-gradient-to-r from-princess-deepPink to-pink-500 hover:from-pink-600 hover:to-pink-700 text-white font-semibold text-xs px-4 py-2.5 rounded-xl shadow transition flex items-center gap-2 transform active:scale-95">
+                                    <span>Ver Projeto</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHTML;
+            });
+        }
+
+        /* ==========================================================================
+           3. FILTROS E GERENCIAMENTO DE PROJETOS
+           ========================================================================== */
+        function filterBimestre(bimestre) {
+            currentFilter = bimestre;
+            
+            // Atualiza botões
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.dataset.bimestre === bimestre) {
+                    btn.classList.add('bg-princess-deepPink', 'text-white');
+                    btn.classList.remove('bg-white', 'text-gray-700', 'hover:bg-pink-100');
+                } else {
+                    btn.classList.remove('bg-princess-deepPink', 'text-white');
+                    btn.classList.add('bg-white', 'text-gray-700', 'hover:bg-pink-100');
+                }
+            });
+
+            renderProjects();
+        }
+
+        function saveProject(e) {
+            e.preventDefault();
+            
+            const newProj = {
+                id: Date.now(),
+                title: document.getElementById('projTitle').value,
+                bimestre: document.getElementById('projBimestre').value,
+                date: document.getElementById('projDate').value,
+                theme: document.getElementById('projTheme').value,
+                desc: document.getElementById('projDesc').value,
+                link: document.getElementById('projLink').value
+            };
+
+            projects.unshift(newProj);
+            localStorage.setItem('disney_portfolio_2027', JSON.stringify(projects));
+            
+            renderProjects();
+            closeModal();
+            document.getElementById('projectForm').reset();
+        }
+
+        function deleteProject(id) {
+            if (confirm("Tem certeza que deseja remover este exercício do portfólio?")) {
+                projects = projects.filter(p => p.id !== id);
+                localStorage.setItem('disney_portfolio_2027', JSON.stringify(projects));
+                renderProjects();
+            }
+        }
+
+        /* Modal Handlers */
+        function openModal() {
+            const modal = document.getElementById('projectModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+                modal.firstElementChild.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('projectModal');
+            modal.firstElementChild.classList.remove('scale-100');
+            modal.firstElementChild.classList.add('scale-95');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        /* ==========================================================================
+           4. EFEITOS MÁGICOS E INTERAÇÃO DO CASTELO
+           ========================================================================== */
+        const quotes = [
+            { quote: "Você é mais forte do que acredita e mais capaz do que imagina!", title: "Princesa Rapunzel" },
+            { quote: "O único modo de conseguir o que quer é trabalhando duro!", title: "Princesa Tiana" },
+            { quote: "Mesmo que o coração chore, a fé trará a esperança!", title: "Princesa Cinderela" },
+            { quote: "Quem disse que meus sonhos têm que continuar sendo apenas sonhos?", title: "Princesa Ariel" },
+            { quote: "A aventura está lá fora, basta ter coragem de aprender!", title: "Princesa Merida" }
+        ];
+
+        function playMagicSound() {
+            // Sintetizador simples de som mágico via Web Audio API
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+                notes.forEach((freq, idx) => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.1);
+                    gain.gain.setValueAtTime(0.15, audioCtx.currentTime + idx * 0.1);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + idx * 0.1 + 0.4);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(audioCtx.currentTime + idx * 0.1);
+                    osc.stop(audioCtx.currentTime + idx * 0.1 + 0.4);
+                });
+            } catch(e) {
+                console.log("Audio not supported or blocked.");
+            }
+        }
+
+        function triggerMagicCastle() {
+            // Toca efeito sonoro sintetizado
+            playMagicSound();
+
+            // Mostra / Atualiza a mensagem com animação
+            const msgBox = document.getElementById('magicMessage');
+            const quoteEl = document.getElementById('princessQuote');
+            const titleEl = document.getElementById('princessTitle');
+
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            quoteEl.textContent = `"${randomQuote.quote}"`;
+            titleEl.textContent = `Mensagem de ${randomQuote.title}`;
+
+            msgBox.classList.remove('hidden');
+            setTimeout(() => {
+                msgBox.classList.remove('opacity-0', 'scale-95');
+                msgBox.classList.add('opacity-100', 'scale-100');
+            }, 10);
+
+            // Explosão de Partículas
+            createSparkleExplosion();
+        }
+
+        /* ==========================================================================
+           5. CANVAS DE PARTÍCULAS (BRILHOS & ESTRELINHAS CAINDO)
+           ========================================================================== */
+        const canvas = document.getElementById('magicCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        class StarParticle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * -height;
+                this.size = Math.random() * 4 + 1;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.speedX = Math.random() * 0.6 - 0.3;
+                this.opacity = Math.random() * 0.8 + 0.2;
+                this.color = ['#F4D06F', '#FF85A1', '#BEE1E6', '#FFFFFF', '#E2ECE9'][Math.floor(Math.random() * 5)];
+                this.rotation = Math.random() * Math.PI * 2;
+                this.rotSpeed = Math.random() * 0.05 - 0.025;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.rotation += this.rotSpeed;
+
+                if (this.y > height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.globalAlpha = this.opacity;
+                ctx.fillStyle = this.color;
+
+                // Desenha uma estrelinha de 4 pontas
+                ctx.beginPath();
+                for (let i = 0; i < 4; i++) {
+                    ctx.lineTo(Math.cos((i * Math.PI) / 2) * this.size, Math.sin((i * Math.PI) / 2) * this.size);
+                    ctx.lineTo(Math.cos((i * Math.PI) / 2 + Math.PI / 4) * (this.size / 2), Math.sin((i * Math.PI) / 2 + Math.PI / 4) * (this.size / 2));
+                }
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Criar vetor de partículas caindo
+        const particles = Array.from({ length: 60 }, () => new StarParticle());
+        let explosionParticles = [];
+
+        function createSparkleExplosion() {
+            const btn = document.getElementById('castleBtn');
+            const rect = btn.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 40; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 2;
+                explosionParticles.push({
+                    x: centerX,
+                    y: centerY,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: Math.random() * 6 + 2,
+                    color: ['#F4D06F', '#FF85A1', '#BEE1E6', '#FFFFFF'][Math.floor(Math.random() * 4)],
+                    life: 1.0
+                });
+            }
+        }
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Desenha partículas de fundo caindo
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            // Atualiza e desenha explosão do botão
+            for (let i = explosionParticles.length - 1; i >= 0; i--) {
+                const ep = explosionParticles[i];
+                ep.x += ep.vx;
+                ep.y += ep.vy;
+                ep.life -= 0.02;
+
+                if (ep.life <= 0) {
+                    explosionParticles.splice(i, 1);
+                    continue;
+                }
+
+                ctx.save();
+                ctx.globalAlpha = ep.life;
+                ctx.fillStyle = ep.color;
+                ctx.beginPath();
+                ctx.arc(ep.x, ep.y, ep.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            requestAnimationFrame(animateCanvas);
+        }
+
+        // Inicialização
+        window.onload = function() {
+            renderProjects();
+            animateCanvas();
+        };
+
+    </script>
+</body>
+</html>
